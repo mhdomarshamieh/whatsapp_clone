@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_whatsapp_clone2/common/enums/message_enum.dart';
 import 'package:flutter_whatsapp_clone2/common/providers/message_reply_provider.dart';
 import 'package:flutter_whatsapp_clone2/common/widgets/loader.dart';
-import 'package:flutter_whatsapp_clone2/features/auth/controller/auth_controller.dart';
 import 'package:flutter_whatsapp_clone2/features/chat/controller/chat_controller.dart';
 import 'package:flutter_whatsapp_clone2/models/message.dart';
 import 'package:flutter_whatsapp_clone2/features/chat/widgets/my_message_card.dart';
@@ -70,7 +69,7 @@ class _ChatListState extends ConsumerState<ChatList> {
                       FirebaseAuth.instance.currentUser!.uid) {
                 ref.read(chatControllerProvider).setChatMessageSeen(
                       context: context,
-                      receiverUserId: message.receiverId,
+                      receiverUserId: widget.receiverUserId,
                       messageId: message.messageId,
                     );
               }
