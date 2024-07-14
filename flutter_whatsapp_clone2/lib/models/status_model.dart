@@ -4,11 +4,11 @@ class Status {
   final String uid;
   final String userName;
   final String phoneNumber;
-  final List<String> photoUrl;
+  final List<dynamic> photoUrl;
   final DateTime createAt;
   final String profilePic;
   final String statusId;
-  final List<String> whoCanSee;
+  final List<dynamic> whoCanSee;
 
 //<editor-fold desc="Data Methods">
   const Status({
@@ -65,11 +65,11 @@ class Status {
     String? uid,
     String? userName,
     String? phoneNumber,
-    List<String>? photoUrl,
+    List<dynamic>? photoUrl,
     DateTime? createAt,
     String? profilePic,
     String? statusId,
-    List<String>? whoCanSee,
+    List<dynamic>? whoCanSee,
   }) {
     return Status(
       uid: uid ?? this.uid,
@@ -101,11 +101,11 @@ class Status {
       uid: map['uid'] as String,
       userName: map['userName'] as String,
       phoneNumber: map['phoneNumber'] as String,
-      photoUrl: map['photoUrl'] as List<String>,
+      photoUrl: map['photoUrl'] as List<dynamic>,
       createAt: (map['createAt'] as Timestamp).toDate(),
       profilePic: map['profilePic'] as String,
       statusId: map['statusId'] as String,
-      whoCanSee: map['whoCanSee'] as List<String>,
+      whoCanSee: map['whoCanSee'] as List<dynamic>,
     );
   }
 
