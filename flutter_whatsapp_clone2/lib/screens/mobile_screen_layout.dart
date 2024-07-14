@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_whatsapp_clone2/colors.dart';
+import 'package:flutter_whatsapp_clone2/common/utils/utils.dart';
 import 'package:flutter_whatsapp_clone2/features/auth/controller/auth_controller.dart';
 import 'package:flutter_whatsapp_clone2/features/select_contacts/screens/select_contacts_screen.dart';
 import 'package:flutter_whatsapp_clone2/features/chat/widgets/contacts_list.dart';
+import 'package:flutter_whatsapp_clone2/features/status/screens/confirm_status_screen.dart';
+import 'package:flutter_whatsapp_clone2/features/status/screens/status_contacts_screen.dart';
 
 class MobileScreenLayout extends ConsumerStatefulWidget {
   const MobileScreenLayout({super.key});
@@ -13,12 +18,14 @@ class MobileScreenLayout extends ConsumerStatefulWidget {
 }
 
 class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, TickerProviderStateMixin {
   // to control app status whether it is paused on the background or completely removed from the RAM etc.
+  late TabController tabController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    tabController = TabController(length: 3, vsync: this);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -75,12 +82,13 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
               ),
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
+            controller: tabController,
             indicatorColor: tabColor,
             indicatorWeight: 4,
             labelColor: tabColor,
             unselectedLabelColor: Colors.grey,
-            labelStyle: TextStyle(
+            labelStyle: const TextStyle(
               fontWeight: FontWeight.bold,
             ),
             tabs: [
@@ -96,12 +104,29 @@ class _MobileScreenLayoutState extends ConsumerState<MobileScreenLayout>
             ],
           ),
         ),
-        body: const ContactsList(),
+        body: TabBarView(
+          controller: tabController,
+          children: const [
+            ContactsList(),
+            StatusContactsScreen(),
+            Text('CALLS'),
+          ],
+        ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              SelectContactsScreen.routeName,
-            );
+          onPressed: () async {
+            if (tabController.index == 0) {
+              Navigator.of(context).pushNamed(
+                SelectContactsScreen.routeName,
+              );
+            } else {
+              File? pickedImage = await pickImageFromGallery(context);
+              if (pickedImage != null) {
+                Navigator.of(context).pushNamed(
+                  ConfirmStatusScreen.routeName,
+                  arguments: pickedImage,
+                );
+              }
+            }
           },
           backgroundColor: tabColor,
           child: const Icon(
